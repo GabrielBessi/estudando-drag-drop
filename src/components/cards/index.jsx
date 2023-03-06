@@ -20,9 +20,10 @@ function Cards({ persons, setPersons }) {
   return (
     <CardStyle>
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="personagens" direction="horizontal">
+        <Droppable droppableId="personagens" direction="horizontal" >
           {(provided) => (
             <ul
+              className="personagens"
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
@@ -45,5 +46,13 @@ function Cards({ persons, setPersons }) {
     </CardStyle>
   );
 }
+// function App() {
+//   const [frames, setFrames] = useState({ id: '', name: '', frames: [], selectedQueuesIds: [] })
 
+//   return (
+//     <TestandoProps frames={frames} setFrames={setFrames}/>
+//   )
+// }
+
+// export default App
 export default Cards;
