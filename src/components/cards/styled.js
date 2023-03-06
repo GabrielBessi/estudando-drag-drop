@@ -11,7 +11,7 @@ export const CardStyle = styled.section`
   ul {
     display: flex;
 
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     /* grid-template-columns: repeat(7, auto); */
     gap: 10px;
 

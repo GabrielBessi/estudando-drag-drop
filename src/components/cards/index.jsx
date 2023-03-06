@@ -55,4 +55,6 @@ function Cards({ persons, setPersons }) {
 // }
 
 // export default App
+
+//https://codesandbox.io/s/using-script-tag-in-react-via-cdn-and-hooks-forked-206lsi?file=/src/dnd.js
 export default Cards;
