@@ -15,6 +15,8 @@ export const LiStyled = styled.li`
   img {
     display: flex;
 
+    border-radius: 10px;
+
     width: 170px;
     height: 170px;
   }

@@ -1,32 +1,43 @@
-import ListCards from "../listCards";
+// import ListCards from "../listCards";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { CardStyle } from "./styled";
-import { ArrayImages } from "../../services";
+import { LiStyled } from "../listCards/styled";
 
-function Cards() {
+function Cards({ persons, setPersons }) {
+
+  function handleOnDragEnd(result){
+    if (!result.destination) return
+
+    const items = Array.from(persons)
+    const [reorderedItem] = items.splice(result.source.index, 1)
+    console.log(result.source.index)
+    items.splice(result.destination.index, 0, reorderedItem)
+    console.log(result.destination.index)
+
+    setPersons(items)
+  }
+  
   return (
     <CardStyle>
-      <DragDropContext>
-        <Droppable droppableId="personagens">
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="personagens" direction="horizontal">
           {(provided) => (
             <ul
-              className="personagens"
-              {...provided.droppableProps}
               ref={provided.innerRef}
+              {...provided.droppableProps}
             >
-              {ArrayImages.map(({ id, imagem, nome }, index) => (
-                <Draggable key={id} draggableId={`${id}`} index={index}>
+              {persons.map(({ id, imagem, nome }, index) => {
+                return (
+                <Draggable key={id} draggableId={id} index={index}>
                   {(provided) => (
-                    <ListCards
-                      imagem={imagem}
-                      nome={nome}
-                      ref_1={provided.innerRef}
-                      ref_2={provided.draggableProps}
-                      ref_3={provided.dragHandleProps}
-                    />
+                    <LiStyled ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <img src={imagem} alt={nome} />
+                      <span>{nome}</span>
+                    </LiStyled>
                   )}
                 </Draggable>
-              ))}
+              )})}
+              {provided.placeholder}
             </ul>
           )}
         </Droppable>
