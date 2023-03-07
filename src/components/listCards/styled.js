@@ -12,6 +12,8 @@ export const LiStyled = styled.li`
 
   border: 2px solid black;
 
+  /* box-sizing: content-box; */
+
   img {
     display: flex;
 
