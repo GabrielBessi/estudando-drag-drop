@@ -10,14 +10,14 @@ export const CardStyle = styled.section`
 
   ul {
 
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    padding: 20px;
+    display: flex;
+    /* grid-template-columns: repeat(4, auto); */
+    padding: grid;
 
     flex-wrap: wrap;
     gap: 10px;
     
-    overflow-x: hidden ;
+    overflow-x: auto;
 
   }
 `;
