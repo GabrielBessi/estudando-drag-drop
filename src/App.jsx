@@ -1,81 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Cards from "./components/cardsSonic/cards";
+import { ArrayImages } from "./services";
 import "./App.css";
-import frames from "./services/data";
 
 function App() {
-  const [cards, setCards] = useState(frames);
-  const [firstColumn, setFirstColumn] = useState([]);
-  const [secondColumn, setSecondColumn] = useState([]);
-  const [thirdColumn, setThirdColumn] = useState([]);
-
-  const orderArray = { 0: [] };
+  const [lineColumn, setListColumn] = useState(validatedArray(ArrayImages));
 
   function validatedArray(dataArray) {
+    const line = { 0: [] };
     dataArray.forEach((elem) => {
       let key = "0";
-      let returnTrueOrFalse = separateArray(elem, orderArray[key]);
-      console.log(elem.width, key, returnTrueOrFalse);
+      let returnTrueOrFalse = separateArray(elem, line[key]);
 
-      if (returnTrueOrFalse) {
-        return;
+      for (let i = 0; i < dataArray.length; i++) {
+        if (returnTrueOrFalse) {
+          return;
+        }
+
+        key = String(Number(key) + 1);
+        let mesa = line[key];
+        if (!mesa) line[key] = mesa = [];
+
+        returnTrueOrFalse = separateArray(elem, mesa);
       }
-
-      key = String(Number(key) + 1);
-      let mesa = orderArray[key];
-      if (!mesa) orderArray[key] = mesa = [];
-
-      returnTrueOrFalse = separateArray(elem, mesa);
-      console.log(elem.width, key, returnTrueOrFalse);
-
-      if (returnTrueOrFalse) {
-        return;
-      }
-
-      key = String(Number(key) + 1);
-      mesa = orderArray[key];
-      if (!mesa) orderArray[key] = mesa = [];
-
-      returnTrueOrFalse = separateArray(elem, mesa);
-      console.log(elem.width, key, returnTrueOrFalse);
-
-      if (returnTrueOrFalse) {
-        return;
-      }
-
-      key = String(Number(key) + 1);
-      mesa = orderArray[key];
-      if (!mesa) orderArray[key] = mesa = [];
-
-      returnTrueOrFalse = separateArray(elem, mesa);
-      console.log(elem.width, key, returnTrueOrFalse);
-
-      if (returnTrueOrFalse) {
-        return;
-      }
-
-      key = String(Number(key) + 1);
-      mesa = orderArray[key];
-      if (!mesa) orderArray[key] = mesa = [];
-      returnTrueOrFalse = separateArray(elem, mesa);
-
-      if (returnTrueOrFalse) {
-        return;
-      }
-
-      key = String(Number(key) + 1);
-      mesa = orderArray[key];
-      if (!mesa) orderArray[key] = mesa = [];
-      returnTrueOrFalse = separateArray(elem, mesa);
     });
-
-    console.log(orderArray);
+    return line;
   }
 
   function separateArray(elem, firstArray) {
     const widthContainer = firstArray.reduce((acc, prev) => {
       acc -= parseInt(prev.width);
       return acc;
-    }, 90);
+    }, 800);
+    console.log(widthContainer);
 
     if (parseInt(elem.width) <= widthContainer) {
       firstArray.push(elem);
@@ -86,7 +43,11 @@ function App() {
     return false;
   }
 
-  return <button onClick={() => validatedArray(cards)}>filtrar</button>;
+  return (
+    <div>
+      <Cards lines={lineColumn} setLines={setListColumn} />
+    </div>
+  );
 }
 
 export default App;

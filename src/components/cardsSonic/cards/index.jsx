@@ -1,70 +1,103 @@
-// import ListCards from "../listCards";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { CardStyle } from "./styled";
-import { LiStyled } from "../listCards/styled";
+import { ContaineGlobal } from "./styled";
+import Linhas from "../listCards/index";
 
-function Cards({ persons, setPersons }) {
+/**
+{
+    "draggableId": "7",
+    "type": "CARD",
+    "source": {
+        "index": 2,
+        "droppableId": "1"
+    },
+    "reason": "DROP",
+    "mode": "FLUID",
+    "destination": {
+        "droppableId": "0",
+        "index": 0
+    },
+    "combine": null
+}
+ */
+function Cards({ lines, setLines }) {
+  function handleOnDragEnd(linesResult) {
+    if (!linesResult.destination) return;
+    console.log(linesResult, lines);
 
-  // function handleOnDragEnd(result){
-  //   if (!result.destination) return
+    const destination = linesResult.destination;
+    const source = linesResult.source;
 
-  //   const items = Array.from(persons)
-  //   const [reorderedItem] = items.splice(result.source.index, 1)
-  //   // console.log(result.source.index)
-  //   items.splice(result.destination.index, 0, reorderedItem)
-  //   // console.log(result.destination.index)
+    const reservaDestino = lines[destination.droppableId][destination.index];
 
-  //   setPersons(items)
-  // }
+    // coloca o source no destino que já foi reservado
+    lines[destination.droppableId][destination.index] =
+      lines[source.droppableId][source.index];
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
+    lines[source.droppableId][source.index] = reservaDestino;
 
-    return result
+    // const items = Array.from(persons);
+    // const [reorderedItem] = items.splice(result.source.index, 1);
+    // items.splice(result.destination.index, 0, reorderedItem);
+
+    console.log(linesResult, lines);
+    setLines(lines);
+
+    // // console.log(items);
+
+    // const newArray = validatedArray(items);
+
+    // setPersons(newArray);
   }
 
-  const grid = 8
-  
-  return (
-    <CardStyle>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="personagens" direction="horizontal" >
-          {(provided) => (
-            <ul
-              className="personagens"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {persons.map(({ id, imagem, nome }, index) => {
-                return (
-                <Draggable key={id} draggableId={id} index={index}>
-                  {(provided) => (
-                    <LiStyled ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <img src={imagem} alt={nome} />
-                      <span>{nome}</span>
-                    </LiStyled>
-                  )}
-                </Draggable>
-              )})}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </CardStyle>
+  // lines
+  /**
+   * { 
+   *  0: [frame1, frame2],
+   *  1: [fram3, frame 4]
+   * }
+   * 
+   * > a = {
+    ... key1: [1, 2, 3],
+    ... key2: [2123, 452, 23]
+    ... }
+    { key1: [ 1, 2, 3 ], key2: [ 2123, 452, 23 ] }
+    > Object.values(a)
+    [ [ 1, 2, 3 ], [ 2123, 452, 23 ] ]
+    > Object.keys(a)
+    [ 'key1', 'key2' ]
+    > array_keys = Object.keys(a)
+    [ 'key1', 'key2' ]
+    > array_keys[0]
+    'key1'
+    > a[array_keys[0]]
+    [ 1, 2, 3 ]
+    > 
+   * 
+   */
+
+  function handleOnDragStart(style, snap) {
+    console.log("--onBeforeCapture", style, snap);
+  }
+
+  console.log("--", Object.keys(lines));
+  return lines ? (
+    <DragDropContext
+      onBeforeCapture={handleOnDragStart}
+      onDragEnd={handleOnDragEnd}
+    >
+      <ContaineGlobal>
+        {Object.keys(lines).map((key) => (
+          <Linhas
+            key={key}
+            type="CARD"
+            listId={key}
+            colunas={lines[key]}
+          ></Linhas>
+        ))}
+      </ContaineGlobal>
+    </DragDropContext>
+  ) : (
+    <p>asdasd</p>
   );
 }
-// function App() {
-//   const [frames, setFrames] = useState({ id: '', name: '', frames: [], selectedQueuesIds: [] })
-
-//   return (
-//     <TestandoProps frames={frames} setFrames={setFrames}/>
-//   )
-// }
-
-// export default App
-
-//https://codesandbox.io/s/using-script-tag-in-react-via-cdn-and-hooks-forked-206lsi?file=/src/dnd.js
 export default Cards;
