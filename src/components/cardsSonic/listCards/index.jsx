@@ -12,21 +12,28 @@ function Linhas({ type, listId, colunas }) {
       <ContainerColuna>
         <DropZone ref={providedLinha.innerRef}>
           {colunas &&
-            colunas.map(({ id, imagem, nome, width }, index) => (
-              <Draggable id={id} key={id} draggableId={id} index={index}>
-                {(provided, snapshot) => (
-                  <div>
-                    <Item
-                      name={nome}
-                      imagem={imagem}
-                      provided={provided}
-                      width={width}
-                    />
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Draggable>
-            ))}
+            colunas.map((item, index) =>
+              item && item.id ? (
+                <Draggable
+                  id={index}
+                  key={item.id}
+                  draggableId={item.id}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
+                    <div>
+                      <Item
+                        name={item.nome}
+                        imagem={item.imagem}
+                        provided={provided}
+                        width={item.width}
+                      />
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Draggable>
+              ) : null
+            )}
         </DropZone>
       </ContainerColuna>
     );
